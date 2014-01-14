@@ -1,3 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Buffer</string>
+    <string name="title_activity_login">Buffer</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_button_login">Login</string>
+
 </resources>

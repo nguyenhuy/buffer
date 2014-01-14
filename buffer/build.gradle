@@ -2,7 +2,7 @@ apply plugin: 'android'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion '19.0.0'
 
     defaultConfig {
         minSdkVersion 14
@@ -19,4 +19,9 @@ android {
 }
 
 dependencies {
+    compile 'org.scribe:scribe:1.3.5'
+    compile 'com.squareup.dagger:dagger:1.1.0'
+    compile 'com.squareup.dagger:dagger-compiler:1.1.0'
+    compile 'com.path:android-priority-jobqueue:1.0'
+    compile 'com.squareup:otto:1.3.4'
 }

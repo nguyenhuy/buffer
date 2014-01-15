@@ -1,6 +1,6 @@
 package org.nguyenhuy.buffer.event;
 
-import org.nguyenhuy.buffer.model.Configuration;
+import org.nguyenhuy.buffer.model.configuration.Configuration;
 
 /**
  * Created by nguyenthanhhuy on 1/15/14.

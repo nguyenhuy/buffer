@@ -14,5 +14,6 @@
     <string name="title_section3">Section 3</string>
 
     <string name="prompt_oauth_failed">OAuth failed :(</string>
+    <string name="prompt_get_configuration_failed">Failed to get configuration.</string>
 
 </resources>

@@ -5,10 +5,10 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.event.ConfigurationAvailableEvent;
 import org.nguyenhuy.buffer.job.GetConfigurationJob;
-import org.nguyenhuy.buffer.model.Configuration;
+import org.nguyenhuy.buffer.model.configuration.Configuration;
 
 /**
- * This class manages {@link org.nguyenhuy.buffer.model.Configuration}
+ * This class manages {@link org.nguyenhuy.buffer.model.configuration.Configuration}
  * provided by Buffer API, including loading the configuration from network.
  * When the configuration is changed,
  * a {@link org.nguyenhuy.buffer.event.ConfigurationAvailableEvent} will be posted.

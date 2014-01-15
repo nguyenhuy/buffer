@@ -1,6 +1,6 @@
 package org.nguyenhuy.buffer.api;
 
-import org.nguyenhuy.buffer.model.Configuration;
+import org.nguyenhuy.buffer.model.configuration.Configuration;
 import retrofit.http.GET;
 import retrofit.http.Query;
 

@@ -13,6 +13,7 @@ import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.event.ConfigurationAvailableEvent;
+import org.nguyenhuy.buffer.event.FailedToGetConfigurationEvent;
 import org.nguyenhuy.buffer.module.ForActivity;
 import org.nguyenhuy.buffer.module.MainActivityModule;
 
@@ -131,6 +132,12 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     @Subscribe
     public void onGotConfiguration(ConfigurationAvailableEvent event) {
         Toast.makeText(this, event.getConfiguration().toString(), Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Subscribe
+    public void onFailedToGetConfiguration(FailedToGetConfigurationEvent event) {
+        Toast.makeText(this, R.string.prompt_get_configuration_failed, Toast.LENGTH_LONG)
                 .show();
     }
 

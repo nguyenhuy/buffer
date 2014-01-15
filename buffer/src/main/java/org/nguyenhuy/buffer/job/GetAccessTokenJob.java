@@ -5,6 +5,7 @@ import com.path.android.jobqueue.Params;
 import com.squareup.otto.Bus;
 import org.nguyenhuy.buffer.event.FailedToGetAccessTokenEvent;
 import org.nguyenhuy.buffer.event.GotAccessTokenEvent;
+import org.nguyenhuy.buffer.util.LogUtils;
 import org.scribe.model.Token;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
@@ -51,6 +52,7 @@ public class GetAccessTokenJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
+        LogUtils.e(throwable);
         return false;
     }
 }

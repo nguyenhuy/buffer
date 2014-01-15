@@ -5,7 +5,9 @@ import org.nguyenhuy.buffer.api.BufferService;
 import org.nguyenhuy.buffer.controller.UserController;
 import org.nguyenhuy.buffer.event.ConfigurationAvailableEvent;
 import org.nguyenhuy.buffer.event.FailedToGetConfigurationEvent;
-import org.nguyenhuy.buffer.model.Configuration;
+import org.nguyenhuy.buffer.model.User;
+import org.nguyenhuy.buffer.model.configuration.Configuration;
+import org.nguyenhuy.buffer.util.LogUtils;
 
 import javax.inject.Inject;
 
@@ -30,7 +32,8 @@ public class GetConfigurationJob extends Job {
     public void onRun() throws Throwable {
         // Assume that user is authenticated before this job is called.
         // May throw exception here to report unauthenticated user.
-        String accessToken = userController.getUser().getAccessToken();
+        User user = userController.getUser();
+        String accessToken = user.getAccessToken();
         final Configuration config = bufferService.getConfiguration(accessToken);
         mainHandler.post(new Runnable() {
             @Override
@@ -52,6 +55,7 @@ public class GetConfigurationJob extends Job {
 
     @Override
     protected boolean shouldReRunOnThrowable(Throwable throwable) {
+        LogUtils.e(throwable);
         return false;
     }
 }

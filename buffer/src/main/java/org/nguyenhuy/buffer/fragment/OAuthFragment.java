@@ -19,6 +19,7 @@ import org.nguyenhuy.buffer.api.ApiConstants;
 import org.nguyenhuy.buffer.event.FailedToGetAccessTokenEvent;
 import org.nguyenhuy.buffer.event.GotAccessTokenEvent;
 import org.nguyenhuy.buffer.job.GetAccessTokenJob;
+import org.nguyenhuy.buffer.module.ForActivity;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
@@ -43,6 +44,7 @@ public class OAuthFragment extends Fragment {
     @Inject
     Bus bus;
     @Inject
+    @ForActivity
     JobManager jobManager;
     @Inject
     ApiConstants apiConstants;
@@ -115,8 +117,6 @@ public class OAuthFragment extends Fragment {
     public void onStart() {
         super.onStart();
         bus.register(this);
-        jobManager.start();
-
         webView.loadUrl(oAuthService.getAuthorizationUrl(null));
     }
 
@@ -136,7 +136,6 @@ public class OAuthFragment extends Fragment {
     public void onStop() {
         super.onStop();
         bus.unregister(this);
-        jobManager.stop();
     }
 
     @Override

@@ -14,11 +14,14 @@ import org.nguyenhuy.buffer.job.GetAccessTokenJob;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.oauth.OAuthService;
 
+import javax.inject.Singleton;
+
 /**
  * Created by nguyenthanhhuy on 1/14/14.
  */
 @Module(
         injects = {
+                LoginActivity.class,
                 OAuthFragment.class,
                 GetAccessTokenJob.class
         },
@@ -47,6 +50,8 @@ public class LoginActivityModule {
     }
 
     @Provides
+    @Singleton
+    @ForActivity
     JobManager provideJobManager() {
         Configuration config = new Configuration.Builder(activity)
                 .injector(new DependencyInjector() {

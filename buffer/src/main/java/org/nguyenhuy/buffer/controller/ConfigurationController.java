@@ -43,7 +43,7 @@ public class ConfigurationController {
         if (configuration != null) {
             bus.post(new ConfigurationAvailableEvent(configuration));
         } else {
-            jobManager.addJob(new GetConfigurationJob());
+            jobManager.addJobInBackground(new GetConfigurationJob());
         }
     }
 

@@ -2,6 +2,7 @@ package org.nguyenhuy.buffer.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -69,12 +70,13 @@ public class LoginActivity extends BaseActivity implements LoginFragment.Delegat
 
     @Override
     public void oAuthFailed() {
-        getFragmentManager().popBackStack(null, 0);
+        Toast.makeText(this, R.string.prompt_oauth_failed, Toast.LENGTH_LONG).show();
+        getFragmentManager().popBackStackImmediate(null, 0);
     }
 
     @Override
     public void oAuthSuccess(String accessToken) {
-        getFragmentManager().popBackStack(null, 0);
+        getFragmentManager().popBackStackImmediate(null, 0);
         userController.setUser(new User(accessToken));
     }
 

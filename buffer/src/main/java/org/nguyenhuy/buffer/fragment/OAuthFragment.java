@@ -76,9 +76,8 @@ public class OAuthFragment extends Fragment {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                showProgress(true);
-
                 if (!url.startsWith(apiConstants.getCallback())) {
+                    showProgress(true);
                     return false;
                 }
 
@@ -87,11 +86,13 @@ public class OAuthFragment extends Fragment {
                 if (!TextUtils.isEmpty(error)) {
                     delegate.oAuthFailed();
                 } else {
+                    showProgress(true);
                     String code = uri.getQueryParameter("code");
                     Verifier verifier = new Verifier(code);
                     GetAccessTokenJob job = new GetAccessTokenJob(verifier);
-                    jobManager.addJob(job);
+                    jobManager.addJobInBackground(job);
                 }
+
                 return true;
             }
 

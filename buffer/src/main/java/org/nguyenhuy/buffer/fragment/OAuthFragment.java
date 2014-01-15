@@ -31,7 +31,7 @@ import javax.inject.Inject;
 public class OAuthFragment extends Fragment {
 
     public interface Delegate {
-        void inject(OAuthFragment fragment);
+        void inject(Object object);
 
         void oAuthFailed();
 

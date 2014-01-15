@@ -3,13 +3,17 @@ package org.nguyenhuy.buffer.module;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import dagger.Module;
 import dagger.Provides;
 import org.nguyenhuy.buffer.BufferApplication;
+import org.nguyenhuy.buffer.api.BufferService;
+import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.UserController;
 import org.nguyenhuy.buffer.controller.UserControllerImpl;
+import retrofit.RestAdapter;
 
 import javax.inject.Singleton;
 

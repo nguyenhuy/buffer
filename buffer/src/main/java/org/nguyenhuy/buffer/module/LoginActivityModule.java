@@ -60,6 +60,7 @@ public class LoginActivityModule {
                         activity.inject(baseJob);
                     }
                 })
+                .id("LoginActivity")
                 .build();
         return new JobManager(activity, config);
     }

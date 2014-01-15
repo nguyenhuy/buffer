@@ -1,11 +1,9 @@
-package org.nguyenhuy.buffer.scribe;
-
-import javax.inject.Inject;
+package org.nguyenhuy.buffer.api;
 
 /**
  * Created by nguyenthanhhuy on 1/14/14.
  */
-public class BufferApiConstants {
+public class ApiConstants {
     public String getApiKey() {
         return "52d426b911243a442d00005f";
     }

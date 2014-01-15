@@ -15,10 +15,10 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
+import org.nguyenhuy.buffer.api.ApiConstants;
 import org.nguyenhuy.buffer.event.FailedToGetAccessTokenEvent;
 import org.nguyenhuy.buffer.event.GotAccessTokenEvent;
 import org.nguyenhuy.buffer.job.GetAccessTokenJob;
-import org.nguyenhuy.buffer.scribe.BufferApiConstants;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
@@ -45,7 +45,7 @@ public class OAuthFragment extends Fragment {
     @Inject
     JobManager jobManager;
     @Inject
-    BufferApiConstants apiConstants;
+    ApiConstants apiConstants;
     @Inject
     OAuthService oAuthService;
 

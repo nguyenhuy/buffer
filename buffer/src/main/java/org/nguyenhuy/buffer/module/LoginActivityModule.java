@@ -7,10 +7,10 @@ import com.path.android.jobqueue.di.DependencyInjector;
 import dagger.Module;
 import dagger.Provides;
 import org.nguyenhuy.buffer.activity.LoginActivity;
+import org.nguyenhuy.buffer.api.ApiConstants;
+import org.nguyenhuy.buffer.api.OAuthApi;
 import org.nguyenhuy.buffer.fragment.OAuthFragment;
 import org.nguyenhuy.buffer.job.GetAccessTokenJob;
-import org.nguyenhuy.buffer.scribe.BufferApi;
-import org.nguyenhuy.buffer.scribe.BufferApiConstants;
 import org.scribe.builder.ServiceBuilder;
 import org.scribe.oauth.OAuthService;
 
@@ -32,14 +32,14 @@ public class LoginActivityModule {
     }
 
     @Provides
-    BufferApiConstants provideApiConstants() {
-        return new BufferApiConstants();
+    ApiConstants provideApiConstants() {
+        return new ApiConstants();
     }
 
     @Provides
-    OAuthService provideOAuthService(BufferApiConstants constants) {
+    OAuthService provideOAuthService(ApiConstants constants) {
         return new ServiceBuilder()
-                .provider(BufferApi.class)
+                .provider(OAuthApi.class)
                 .apiKey(constants.getApiKey())
                 .apiSecret(constants.getApiSecret())
                 .callback(constants.getCallback())

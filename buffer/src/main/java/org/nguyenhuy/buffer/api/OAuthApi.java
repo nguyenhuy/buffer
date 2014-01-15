@@ -1,4 +1,4 @@
-package org.nguyenhuy.buffer.scribe;
+package org.nguyenhuy.buffer.api;
 
 import org.scribe.builder.api.DefaultApi20;
 import org.scribe.model.OAuthConfig;
@@ -7,7 +7,7 @@ import org.scribe.utils.OAuthEncoder;
 /**
  * Created by nguyenthanhhuy on 1/14/14.
  */
-public class BufferApi extends DefaultApi20{
+public class OAuthApi extends DefaultApi20{
     private static final String AUTHORIZATION_URL = "https://bufferapp.com/oauth2/authorize" +
             "?client_id=%s&redirect_uri=%s&response_type=code";
 

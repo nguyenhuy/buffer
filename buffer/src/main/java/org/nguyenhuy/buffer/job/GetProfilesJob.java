@@ -3,6 +3,7 @@ package org.nguyenhuy.buffer.job;
 import com.path.android.jobqueue.Params;
 import org.nguyenhuy.buffer.event.DataSource;
 import org.nguyenhuy.buffer.event.FailedToGetProfilesEvent;
+import org.nguyenhuy.buffer.event.GettingProfilesEvent;
 import org.nguyenhuy.buffer.event.GotProfilesEvent;
 import org.nguyenhuy.buffer.model.user.Profile;
 import org.nguyenhuy.buffer.util.LogUtils;
@@ -22,6 +23,12 @@ public class GetProfilesJob extends AuthenticatedJob {
     @Override
     public void onAdded() {
         LogUtils.v("GetProfile: added");
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                bus.post(new GettingProfilesEvent());
+            }
+        });
     }
 
     @Override

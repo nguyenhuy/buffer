@@ -1,8 +1,6 @@
 package org.nguyenhuy.buffer.job;
 
-import android.os.Handler;
 import com.path.android.jobqueue.Params;
-import com.squareup.otto.Bus;
 import org.nguyenhuy.buffer.event.FailedToGetAccessTokenEvent;
 import org.nguyenhuy.buffer.event.GotAccessTokenEvent;
 import org.nguyenhuy.buffer.util.LogUtils;

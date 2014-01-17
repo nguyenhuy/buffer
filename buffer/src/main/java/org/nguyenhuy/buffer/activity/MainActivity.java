@@ -11,9 +11,9 @@ import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
+import org.nguyenhuy.buffer.controller.AccessTokenController;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
-import org.nguyenhuy.buffer.controller.AccessTokenController;
 import org.nguyenhuy.buffer.event.*;
 import org.nguyenhuy.buffer.model.user.Profile;
 import org.nguyenhuy.buffer.module.ForActivity;
@@ -21,6 +21,7 @@ import org.nguyenhuy.buffer.module.MainActivityModule;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener {
 
@@ -39,10 +40,12 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     AccessTokenController accessTokenController;
     @Inject
     ProfilesController profilesController;
+    private int loadingCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
     }
 
@@ -131,26 +134,44 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     @Subscribe
+    public void onGettingConfiguration(GettingConfigurationEvent event) {
+        showLoadingIndicator();
+    }
+
+    @Subscribe
     public void onGotConfiguration(GotConfigurationEvent event) {
         Toast.makeText(this, event.getConfiguration().toString(), Toast.LENGTH_LONG)
                 .show();
+        if (event.getSource() == DataSource.NETWORK) {
+            hideLoadingIndicator();
+        }
     }
 
     @Subscribe
     public void onFailedToGetConfiguration(FailedToGetConfigurationEvent event) {
         Toast.makeText(this, R.string.prompt_failed_to_get_configuration, Toast.LENGTH_LONG)
                 .show();
+        hideLoadingIndicator();
+    }
+
+    @Subscribe
+    public void onGettingProfiles(GettingProfilesEvent event) {
+        showLoadingIndicator();
     }
 
     @Subscribe
     public void onGotProfilesController(GotProfilesEvent event) {
         setUpDropDownList(event.getProfiles());
+        if (event.getSource() == DataSource.NETWORK) {
+            hideLoadingIndicator();
+        }
     }
 
     @Subscribe
     public void onFailedToGetProfiles(FailedToGetProfilesEvent event) {
         Toast.makeText(this, R.string.prompt_failed_to_get_profiles, Toast.LENGTH_LONG)
                 .show();
+        hideLoadingIndicator();
     }
 
     private void logout() {
@@ -181,6 +202,20 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
                         android.R.id.text1,
                         titles),
                 this);
+    }
+
+    private void showLoadingIndicator() {
+        ++loadingCounter;
+        if (loadingCounter == 1) {
+            setProgressBarIndeterminateVisibility(true);
+        }
+    }
+
+    private void hideLoadingIndicator() {
+        --loadingCounter;
+        if (loadingCounter == 0) {
+            setProgressBarIndeterminateVisibility(false);
+        }
     }
 
     /**

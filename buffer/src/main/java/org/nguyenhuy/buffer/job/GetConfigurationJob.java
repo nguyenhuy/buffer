@@ -2,6 +2,7 @@ package org.nguyenhuy.buffer.job;
 
 import com.path.android.jobqueue.Params;
 import org.nguyenhuy.buffer.event.DataSource;
+import org.nguyenhuy.buffer.event.GettingConfigurationEvent;
 import org.nguyenhuy.buffer.event.GotConfigurationEvent;
 import org.nguyenhuy.buffer.event.FailedToGetConfigurationEvent;
 import org.nguyenhuy.buffer.model.configuration.Configuration;
@@ -18,6 +19,12 @@ public class GetConfigurationJob extends AuthenticatedJob {
 
     @Override
     public void onAdded() {
+        mainHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                bus.post(new GettingConfigurationEvent());
+            }
+        });
     }
 
     @Override

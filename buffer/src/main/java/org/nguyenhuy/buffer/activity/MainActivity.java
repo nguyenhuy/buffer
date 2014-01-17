@@ -2,6 +2,7 @@ package org.nguyenhuy.buffer.activity;
 
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.widget.ArrayAdapter;
@@ -12,8 +13,10 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
+import org.nguyenhuy.buffer.controller.UserController;
 import org.nguyenhuy.buffer.event.ConfigurationAvailableEvent;
 import org.nguyenhuy.buffer.event.FailedToGetConfigurationEvent;
+import org.nguyenhuy.buffer.event.UserChangedEvent;
 import org.nguyenhuy.buffer.module.ForActivity;
 import org.nguyenhuy.buffer.module.MainActivityModule;
 
@@ -34,6 +37,8 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     JobManager jobManager;
     @Inject
     Bus bus;
+    @Inject
+    UserController userController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +110,11 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId())  {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_log_out:
+                logout();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -130,6 +137,15 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     @Subscribe
+    public void onUserChanged(UserChangedEvent event) {
+        if (event.getUser() == null || !event.getUser().isAuthenticated()) {
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
+
+    @Subscribe
     public void onGotConfiguration(ConfigurationAvailableEvent event) {
         Toast.makeText(this, event.getConfiguration().toString(), Toast.LENGTH_LONG)
                 .show();
@@ -139,6 +155,13 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     public void onFailedToGetConfiguration(FailedToGetConfigurationEvent event) {
         Toast.makeText(this, R.string.prompt_get_configuration_failed, Toast.LENGTH_LONG)
                 .show();
+    }
+
+    private void logout() {
+        configurationController.removeConfiguration();
+        userController.removeUser();
+        // Expect to receive UserChangedEvent after this point, so LoginActivity
+        // will be started.
     }
 
     /**

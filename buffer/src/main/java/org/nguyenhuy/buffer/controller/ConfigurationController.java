@@ -51,4 +51,8 @@ public class ConfigurationController {
     public void onGotNewConfiguration(ConfigurationAvailableEvent event) {
         configuration = event.getConfiguration();
     }
+
+    public void removeConfiguration() {
+        configuration = null;
+    }
 }

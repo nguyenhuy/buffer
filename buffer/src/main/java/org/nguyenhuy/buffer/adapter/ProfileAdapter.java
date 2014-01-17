@@ -65,11 +65,13 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
         Profile profile = getItem(position);
         String service = profile.getService();
         viewHolder.username.setText(profile.getFormattedUsername());
+        Transformation transformation = new RoundedCornerTransformation();
         Picasso.with(getContext()).load(profile.getAvatar())
-                .transform(new RoundedCornerTransformation())
+                .transform(transformation)
                 .into(viewHolder.avatar);
         if (serviceIcons != null && serviceIcons.containsKey(service)) {
             Picasso.with(getContext()).load(serviceIcons.get(service))
+                    .transform(transformation)
                     .into(viewHolder.serviceIcon);
         }
 
@@ -83,7 +85,7 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
     }
 
     private static class RoundedCornerTransformation implements Transformation {
-        private static final int CORNER_RADIUS = 3;
+        private static final int CORNER_RADIUS = 5;
 
         @Override
         public Bitmap transform(Bitmap bitmap) {

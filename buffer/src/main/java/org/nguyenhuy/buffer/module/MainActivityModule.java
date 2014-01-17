@@ -46,9 +46,11 @@ public class MainActivityModule {
 
     @Provides
     @Singleton
-    ConfigurationController provideConfigurationController(@ForActivity JobManager jobManager,
-                                                           Bus bus) {
-        return new ConfigurationController(bus, jobManager);
+    ConfigurationController provideConfigurationController(
+            @ForActivity JobManager jobManager,
+            Bus bus,
+            @ForApplication SharedPreferences sharedPreferences) {
+        return new ConfigurationController(bus, jobManager, sharedPreferences);
     }
 
     @Provides

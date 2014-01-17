@@ -1,15 +1,17 @@
 package org.nguyenhuy.buffer.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import dagger.Module;
 import dagger.Provides;
 import org.nguyenhuy.buffer.BufferApplication;
-import org.nguyenhuy.buffer.controller.AccessTokenControllerImpl;
 import org.nguyenhuy.buffer.controller.AccessTokenController;
+import org.nguyenhuy.buffer.controller.AccessTokenControllerImpl;
 
 import javax.inject.Singleton;
 
@@ -51,5 +53,12 @@ public class ApplicationModule {
     @Provides
     Handler provideMainHandler() {
         return new Handler(Looper.getMainLooper());
+    }
+
+    @Provides
+    @Singleton
+    @ForApplication
+    SharedPreferences provideDefaultSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(application);
     }
 }

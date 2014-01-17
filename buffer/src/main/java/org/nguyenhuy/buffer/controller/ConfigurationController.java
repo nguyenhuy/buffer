@@ -1,5 +1,7 @@
 package org.nguyenhuy.buffer.controller;
 
+import android.content.SharedPreferences;
+import com.google.gson.Gson;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -19,13 +21,22 @@ import org.nguyenhuy.buffer.model.configuration.Configuration;
  * must be called according to lifecycle of the host.
  */
 public class ConfigurationController {
+    private static final String KEY_CONFIG = "config";
+
     private Configuration configuration;
     private Bus bus;
     private JobManager jobManager;
+    private SharedPreferences sharedPreferences;
 
-    public ConfigurationController(Bus bus, JobManager jobManager) {
+    public ConfigurationController(Bus bus, JobManager jobManager,
+                                   SharedPreferences sharedPreferences) {
         this.bus = bus;
         this.jobManager = jobManager;
+        this.sharedPreferences = sharedPreferences;
+        if (sharedPreferences.contains(KEY_CONFIG)) {
+            String json = sharedPreferences.getString(KEY_CONFIG, "");
+            configuration = new Gson().fromJson(json, Configuration.class);
+        }
     }
 
     public void onStart() {
@@ -51,9 +62,12 @@ public class ConfigurationController {
     @Subscribe
     public void onGotNewConfiguration(GotConfigurationEvent event) {
         configuration = event.getConfiguration();
+        String json = new Gson().toJson(configuration);
+        sharedPreferences.edit().putString(KEY_CONFIG, json).apply();
     }
 
     public void removeConfiguration() {
         configuration = null;
+        sharedPreferences.edit().remove(KEY_CONFIG).apply();
     }
 }

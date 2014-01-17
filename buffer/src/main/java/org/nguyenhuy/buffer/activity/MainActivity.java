@@ -131,7 +131,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     @Subscribe
-    public void onGotConfiguration(ConfigurationAvailableEvent event) {
+    public void onGotConfiguration(GotConfigurationEvent event) {
         Toast.makeText(this, event.getConfiguration().toString(), Toast.LENGTH_LONG)
                 .show();
     }

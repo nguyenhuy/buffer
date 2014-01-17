@@ -3,7 +3,7 @@ package org.nguyenhuy.buffer.controller;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import org.nguyenhuy.buffer.event.ConfigurationAvailableEvent;
+import org.nguyenhuy.buffer.event.GotConfigurationEvent;
 import org.nguyenhuy.buffer.job.GetConfigurationJob;
 import org.nguyenhuy.buffer.model.configuration.Configuration;
 
@@ -11,7 +11,7 @@ import org.nguyenhuy.buffer.model.configuration.Configuration;
  * This class manages {@link org.nguyenhuy.buffer.model.configuration.Configuration}
  * provided by Buffer API, including loading the configuration from network.
  * When the configuration is changed,
- * a {@link org.nguyenhuy.buffer.event.ConfigurationAvailableEvent} will be posted.
+ * a {@link org.nguyenhuy.buffer.event.GotConfigurationEvent} will be posted.
  * Note that by design, configuration is cached in memory but not persistent store.
  * Also, this controller must be tied to lifecycle of an application or an activity
  * (depends on which object hosts it). So {@link #onStart()} and {@link #onStop()}
@@ -37,18 +37,18 @@ public class ConfigurationController {
 
     /**
      * Loads configuration. Subscribers will receive
-     * a {@link org.nguyenhuy.buffer.event.ConfigurationAvailableEvent} later.
+     * a {@link org.nguyenhuy.buffer.event.GotConfigurationEvent} later.
      */
     public void loadConfiguration() {
         if (configuration != null) {
-            bus.post(new ConfigurationAvailableEvent(configuration));
+            bus.post(new GotConfigurationEvent(configuration));
         } else {
             jobManager.addJobInBackground(new GetConfigurationJob());
         }
     }
 
     @Subscribe
-    public void onGotNewConfiguration(ConfigurationAvailableEvent event) {
+    public void onGotNewConfiguration(GotConfigurationEvent event) {
         configuration = event.getConfiguration();
     }
 

@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import org.nguyenhuy.buffer.event.DataSource;
 import org.nguyenhuy.buffer.event.GotProfilesEvent;
 import org.nguyenhuy.buffer.job.GetProfilesJob;
 import org.nguyenhuy.buffer.job.JobPriority;
@@ -58,7 +59,7 @@ public class ProfilesController {
     public void loadProfiles() {
         int priority = JobPriority.UI;
         if (profiles != null) {
-            bus.post(new GotProfilesEvent(profiles));
+            bus.post(new GotProfilesEvent(DataSource.CACHED, profiles));
             priority = JobPriority.SYNC;
         }
         jobManager.addJobInBackground(new GetProfilesJob(priority));

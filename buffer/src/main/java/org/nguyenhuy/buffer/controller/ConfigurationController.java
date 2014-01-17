@@ -3,6 +3,7 @@ package org.nguyenhuy.buffer.controller;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import org.nguyenhuy.buffer.event.DataSource;
 import org.nguyenhuy.buffer.event.GotConfigurationEvent;
 import org.nguyenhuy.buffer.job.GetConfigurationJob;
 import org.nguyenhuy.buffer.model.configuration.Configuration;
@@ -41,7 +42,7 @@ public class ConfigurationController {
      */
     public void loadConfiguration() {
         if (configuration != null) {
-            bus.post(new GotConfigurationEvent(configuration));
+            bus.post(new GotConfigurationEvent(DataSource.CACHED, configuration));
         } else {
             jobManager.addJobInBackground(new GetConfigurationJob());
         }

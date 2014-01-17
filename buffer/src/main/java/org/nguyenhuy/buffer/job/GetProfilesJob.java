@@ -1,6 +1,7 @@
 package org.nguyenhuy.buffer.job;
 
 import com.path.android.jobqueue.Params;
+import org.nguyenhuy.buffer.event.DataSource;
 import org.nguyenhuy.buffer.event.FailedToGetProfilesEvent;
 import org.nguyenhuy.buffer.event.GotProfilesEvent;
 import org.nguyenhuy.buffer.model.user.Profile;
@@ -31,7 +32,7 @@ public class GetProfilesJob extends AuthenticatedJob {
         mainHandler.post(new Runnable() {
             @Override
             public void run() {
-                bus.post(new GotProfilesEvent(profiles));
+                bus.post(new GotProfilesEvent(DataSource.NETWORK, profiles));
             }
         });
     }

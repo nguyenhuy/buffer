@@ -6,9 +6,11 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
+import com.squareup.otto.Subscribe;
+import org.nguyenhuy.buffer.event.GotProfilesEvent;
 import org.nguyenhuy.buffer.event.UserAvailableEvent;
 import org.nguyenhuy.buffer.event.UserChangedEvent;
-import org.nguyenhuy.buffer.model.User;
+import org.nguyenhuy.buffer.model.user.User;
 import org.nguyenhuy.buffer.module.ForApplication;
 
 import javax.inject.Inject;
@@ -48,7 +50,7 @@ public class UserControllerImpl implements UserController {
     @Override
     public void setUser(User user) {
         this.user = user;
-        sharedPreferences.edit().putString(KEY_USER, new Gson().toJson(user)).apply();
+        save();
         bus.post(new UserChangedEvent(user));
     }
 
@@ -68,5 +70,9 @@ public class UserControllerImpl implements UserController {
             return new UserAvailableEvent(user);
         }
         return null;
+    }
+
+    private void save() {
+        sharedPreferences.edit().putString(KEY_USER, new Gson().toJson(user)).apply();
     }
 }

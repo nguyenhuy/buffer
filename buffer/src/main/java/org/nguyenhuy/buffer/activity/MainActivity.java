@@ -12,14 +12,15 @@ import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
+import org.nguyenhuy.buffer.controller.ProfilesController;
 import org.nguyenhuy.buffer.controller.UserController;
-import org.nguyenhuy.buffer.event.ConfigurationAvailableEvent;
-import org.nguyenhuy.buffer.event.FailedToGetConfigurationEvent;
-import org.nguyenhuy.buffer.event.UserChangedEvent;
+import org.nguyenhuy.buffer.event.*;
+import org.nguyenhuy.buffer.model.user.Profile;
 import org.nguyenhuy.buffer.module.ForActivity;
 import org.nguyenhuy.buffer.module.MainActivityModule;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener {
 
@@ -36,30 +37,13 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     JobManager jobManager;
     @Inject
     UserController userController;
+    @Inject
+    ProfilesController profilesController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Set up the action bar to show a dropdown list.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-        // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(
-                // Specify a SpinnerAdapter to populate the dropdown list.
-                new ArrayAdapter<String>(
-                        actionBar.getThemedContext(),
-                        android.R.layout.simple_list_item_1,
-                        android.R.id.text1,
-                        new String[]{
-                                getString(R.string.title_section1),
-                                getString(R.string.title_section2),
-                                getString(R.string.title_section3),
-                        }),
-                this);
     }
 
     @Override
@@ -74,23 +58,29 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     @Override
     protected void onStart() {
         super.onStart();
-        configurationController.onStart();
         jobManager.start();
+        configurationController.onStart();
+        profilesController.onStart();
         configurationController.loadConfiguration();
+        profilesController.loadProfiles();
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Serialize the current dropdown position.
-        outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
-                getActionBar().getSelectedNavigationIndex());
+        ActionBar actionBar = getActionBar();
+        if (actionBar.getNavigationMode() == ActionBar.NAVIGATION_MODE_LIST) {
+            outState.putInt(STATE_SELECTED_NAVIGATION_ITEM,
+                    actionBar.getSelectedNavigationIndex());
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        configurationController.onStop();
         jobManager.stop();
+        configurationController.onStop();
+        profilesController.onStop();
     }
 
     @Override
@@ -105,7 +95,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch(item.getItemId())  {
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
             case R.id.action_log_out:
@@ -152,11 +142,45 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
                 .show();
     }
 
+    @Subscribe
+    public void onGotProfilesController(GotProfilesEvent event) {
+        setUpDropDownList(event.getProfiles());
+    }
+
+    @Subscribe
+    public void onFailedToGetProfiles(FailedToGetProfilesEvent event) {
+        Toast.makeText(this, R.string.prompt_get_profiles_failed, Toast.LENGTH_LONG)
+                .show();
+    }
+
     private void logout() {
         configurationController.removeConfiguration();
         userController.removeUser();
         // Expect to receive UserChangedEvent after this point, so LoginActivity
         // will be started.
+    }
+
+    private void setUpDropDownList(List<Profile> profiles) {
+        int size = profiles.size();
+        String[] titles = new String[size];
+        for (int i = 0; i < size; ++i) {
+            titles[i] = profiles.get(i).getFormattedUsername();
+        }
+
+        // Set up the action bar to show a dropdown list.
+        final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+        // Set up the dropdown list navigation in the action bar.
+        actionBar.setListNavigationCallbacks(
+                // Specify a SpinnerAdapter to populate the dropdown list.
+                new ArrayAdapter<String>(
+                        actionBar.getThemedContext(),
+                        android.R.layout.simple_list_item_1,
+                        android.R.id.text1,
+                        titles),
+                this);
     }
 
     /**

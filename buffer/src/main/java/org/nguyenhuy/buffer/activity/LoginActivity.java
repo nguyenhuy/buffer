@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.controller.UserController;
@@ -12,7 +11,7 @@ import org.nguyenhuy.buffer.event.UserAvailableEvent;
 import org.nguyenhuy.buffer.event.UserChangedEvent;
 import org.nguyenhuy.buffer.fragment.LoginFragment;
 import org.nguyenhuy.buffer.fragment.OAuthFragment;
-import org.nguyenhuy.buffer.model.User;
+import org.nguyenhuy.buffer.model.user.User;
 import org.nguyenhuy.buffer.module.ForActivity;
 import org.nguyenhuy.buffer.module.LoginActivityModule;
 

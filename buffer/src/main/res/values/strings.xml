@@ -11,11 +11,8 @@
 
     <string name="title_button_login">Sign in</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-
     <string name="prompt_oauth_failed">OAuth failed :(</string>
     <string name="prompt_get_configuration_failed">Failed to get configuration.</string>
+    <string name="prompt_get_profiles_failed">Failed to get profiles.</string>
 
 </resources>

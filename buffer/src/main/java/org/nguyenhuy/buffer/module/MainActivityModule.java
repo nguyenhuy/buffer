@@ -10,7 +10,9 @@ import dagger.Provides;
 import org.nguyenhuy.buffer.activity.MainActivity;
 import org.nguyenhuy.buffer.api.BufferService;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
+import org.nguyenhuy.buffer.controller.ProfilesController;
 import org.nguyenhuy.buffer.job.GetConfigurationJob;
+import org.nguyenhuy.buffer.job.GetProfilesJob;
 import retrofit.RestAdapter;
 
 import javax.inject.Singleton;
@@ -21,7 +23,8 @@ import javax.inject.Singleton;
 @Module(
         injects = {
                 MainActivity.class,
-                GetConfigurationJob.class
+                GetConfigurationJob.class,
+                GetProfilesJob.class
         },
         complete = false
 )
@@ -37,6 +40,13 @@ public class MainActivityModule {
     ConfigurationController provideConfigurationController(@ForActivity JobManager jobManager,
                                                            Bus bus) {
         return new ConfigurationController(bus, jobManager);
+    }
+
+    @Provides
+    @Singleton
+    ProfilesController provideProfilesController(@ForActivity JobManager jobManager,
+                                                 Bus bus) {
+        return new ProfilesController(activity, bus, jobManager);
     }
 
     @Provides

@@ -1,8 +1,7 @@
 package org.nguyenhuy.buffer.controller;
 
 import org.nguyenhuy.buffer.event.UserAvailableEvent;
-import org.nguyenhuy.buffer.event.UserChangedEvent;
-import org.nguyenhuy.buffer.model.User;
+import org.nguyenhuy.buffer.model.user.User;
 
 /**
  * This class manages the currrent logged in user, including saving to

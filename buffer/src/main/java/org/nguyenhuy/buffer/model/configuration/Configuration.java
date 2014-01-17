@@ -8,4 +8,8 @@ import java.util.Map;
 public class Configuration {
     private Media media;
     private Map<String, Service> services;
+
+    public Map<String, Service> getServices() {
+        return services;
+    }
 }

@@ -1,5 +1,7 @@
 package org.nguyenhuy.buffer.module;
 
+import android.content.Context;
+import android.view.LayoutInflater;
 import com.path.android.jobqueue.BaseJob;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
@@ -33,6 +35,13 @@ public class MainActivityModule {
 
     public MainActivityModule(MainActivity activity) {
         this.activity = activity;
+    }
+
+    @Provides
+    @Singleton
+    @ForActivity
+    Context provideContext() {
+        return activity;
     }
 
     @Provides
@@ -71,5 +80,11 @@ public class MainActivityModule {
                 .setServer("https://api.bufferapp.com/1")
                 .build();
         return adapter.create(BufferService.class);
+    }
+
+    @Provides
+    @Singleton
+    LayoutInflater provideLayoutInflater() {
+        return LayoutInflater.from(activity);
     }
 }

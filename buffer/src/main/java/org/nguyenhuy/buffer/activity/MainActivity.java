@@ -5,23 +5,26 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
+import org.nguyenhuy.buffer.adapter.ProfileAdapter;
 import org.nguyenhuy.buffer.controller.AccessTokenController;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
 import org.nguyenhuy.buffer.event.*;
+import org.nguyenhuy.buffer.model.configuration.Service;
 import org.nguyenhuy.buffer.model.user.Profile;
 import org.nguyenhuy.buffer.module.ForActivity;
 import org.nguyenhuy.buffer.module.MainActivityModule;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
 
 public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener {
 
@@ -40,7 +43,11 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     AccessTokenController accessTokenController;
     @Inject
     ProfilesController profilesController;
+    @Inject
+    Provider<ProfileAdapter> profileAdapterProvider;
     private int loadingCounter;
+    private ProfileAdapter profileAdapter;
+    private Map<String, String> serviceIcons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,10 +147,19 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     @Subscribe
     public void onGotConfiguration(GotConfigurationEvent event) {
-        Toast.makeText(this, event.getConfiguration().toString(), Toast.LENGTH_LONG)
-                .show();
         if (event.getSource() == DataSource.NETWORK) {
             hideLoadingIndicator();
+        }
+        // Construct a map of service names and and service icon URLs.
+        serviceIcons = new HashMap<String, String>();
+        Map<String, Service> services = event.getConfiguration().getServices();
+        for (Map.Entry<String, Service> entry : services.entrySet()) {
+            String serviceName = entry.getKey();
+            Service service = entry.getValue();
+            serviceIcons.put(serviceName, service.getIcon());
+        }
+        if (profileAdapter != null) {
+            profileAdapter.setServiceIcons(serviceIcons);
         }
     }
 
@@ -182,26 +198,20 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     private void setUpDropDownList(List<Profile> profiles) {
-        int size = profiles.size();
-        String[] titles = new String[size];
-        for (int i = 0; i < size; ++i) {
-            titles[i] = profiles.get(i).getFormattedUsername();
+        profileAdapter = profileAdapterProvider.get();
+        profileAdapter.addAll(profiles);
+        if (serviceIcons != null) {
+            profileAdapter.setServiceIcons(serviceIcons);
         }
 
         // Set up the action bar to show a dropdown list.
         final ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(
-                // Specify a SpinnerAdapter to populate the dropdown list.
-                new ArrayAdapter<String>(
-                        actionBar.getThemedContext(),
-                        android.R.layout.simple_list_item_1,
-                        android.R.id.text1,
-                        titles),
-                this);
+        actionBar.setListNavigationCallbacks(profileAdapter, this);
     }
 
     private void showLoadingIndicator() {

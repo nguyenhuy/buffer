@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="?android:attr/actionBarSize"
+              android:orientation="horizontal"
+              android:gravity="center">
+
+    <include android:layout_width="@dimen/profile_avatar_width"
+             android:layout_height="@dimen/profile_avatar_height"
+             android:layout_margin="@dimen/profile_avatar_margin"
+             layout="@layout/view_avatar"/>
+
+    <TextView android:id="@+id/profile_username"
+              android:layout_width="match_parent"
+              android:layout_height="?android:attr/actionBarSize"
+              android:singleLine="true"
+              android:ellipsize="marquee"
+              android:gravity="center_vertical"
+              android:textAppearance="?android:attr/actionMenuTextAppearance"/>
+
+</LinearLayout>

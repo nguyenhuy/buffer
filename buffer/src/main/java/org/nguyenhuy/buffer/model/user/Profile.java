@@ -30,7 +30,15 @@ public class Profile {
     @SerializedName("user_id")
     private String userId;
 
+    public String getAvatar() {
+        return avatar;
+    }
+
     public String getFormattedUsername() {
         return formattedUsername;
+    }
+
+    public String getService() {
+        return service;
     }
 }

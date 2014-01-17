@@ -71,8 +71,8 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         jobManager.start();
         configurationController.onStart();
         profilesController.onStart();
-        configurationController.loadConfiguration();
-        profilesController.loadProfiles();
+        configurationController.load();
+        profilesController.load();
     }
 
     @Override
@@ -191,8 +191,9 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     private void logout() {
-        configurationController.removeConfiguration();
-        accessTokenController.remove();
+        configurationController.clear();
+        profilesController.clear();
+        accessTokenController.clear();
         // Expect to receive AccessTokenChangedEvent after this point, so LoginActivity
         // will be started.
     }

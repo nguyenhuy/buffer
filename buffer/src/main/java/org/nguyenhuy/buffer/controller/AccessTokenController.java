@@ -23,7 +23,7 @@ public interface AccessTokenController {
 
     boolean isAvailable();
 
-    void remove();
+    void clear();
 
     AccessTokenAvailableEvent produceAccessTokenAvailableEvent();
 }

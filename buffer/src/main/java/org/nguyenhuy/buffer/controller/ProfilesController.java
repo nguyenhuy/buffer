@@ -32,11 +32,11 @@ public class ProfilesController {
     private JobManager jobManager;
     private List<Profile> profiles;
 
-    public ProfilesController(Context context, Bus bus, JobManager jobManager) {
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    public ProfilesController(Bus bus, JobManager jobManager,
+                              SharedPreferences sharedPreferences) {
         this.bus = bus;
         this.jobManager = jobManager;
-
+        this.sharedPreferences = sharedPreferences;
         if (sharedPreferences.contains(KEY_PROFILES)) {
             String json = sharedPreferences.getString(KEY_PROFILES, "");
             Profile[] data = new Gson().fromJson(json, Profile[].class);
@@ -56,7 +56,7 @@ public class ProfilesController {
      * Loads profiles. Subscribers will receive a
      * {@link org.nguyenhuy.buffer.event.GotProfilesEvent} when loading finished.
      */
-    public void loadProfiles() {
+    public void load() {
         int priority = JobPriority.UI;
         if (profiles != null) {
             bus.post(new GotProfilesEvent(DataSource.CACHED, profiles));
@@ -64,6 +64,11 @@ public class ProfilesController {
         }
         jobManager.addJobInBackground(new GetProfilesJob(priority));
         LogUtils.v("GetProfile: add to job manager");
+    }
+
+    public void clear() {
+        profiles = null;
+        sharedPreferences.edit().remove(KEY_PROFILES).apply();
     }
 
     @Subscribe

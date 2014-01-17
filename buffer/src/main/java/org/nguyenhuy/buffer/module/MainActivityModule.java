@@ -1,6 +1,7 @@
 package org.nguyenhuy.buffer.module;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import com.path.android.jobqueue.BaseJob;
 import com.path.android.jobqueue.JobManager;
@@ -55,9 +56,11 @@ public class MainActivityModule {
 
     @Provides
     @Singleton
-    ProfilesController provideProfilesController(@ForActivity JobManager jobManager,
-                                                 Bus bus) {
-        return new ProfilesController(activity, bus, jobManager);
+    ProfilesController provideProfilesController(
+            @ForActivity JobManager jobManager,
+            Bus bus,
+            @ForApplication SharedPreferences sharedPreferences) {
+        return new ProfilesController(bus, jobManager, sharedPreferences);
     }
 
     @Provides

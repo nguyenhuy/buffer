@@ -51,7 +51,7 @@ public class ConfigurationController {
      * Loads configuration. Subscribers will receive
      * a {@link org.nguyenhuy.buffer.event.GotConfigurationEvent} later.
      */
-    public void loadConfiguration() {
+    public void load() {
         if (configuration != null) {
             bus.post(new GotConfigurationEvent(DataSource.CACHED, configuration));
         } else {
@@ -66,7 +66,7 @@ public class ConfigurationController {
         sharedPreferences.edit().putString(KEY_CONFIG, json).apply();
     }
 
-    public void removeConfiguration() {
+    public void clear() {
         configuration = null;
         sharedPreferences.edit().remove(KEY_CONFIG).apply();
     }

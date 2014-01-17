@@ -1,10 +1,7 @@
 package org.nguyenhuy.buffer.controller;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import com.google.gson.Gson;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Produce;
 import org.nguyenhuy.buffer.event.AccessTokenAvailableEvent;
@@ -21,9 +18,10 @@ public class AccessTokenControllerImpl implements AccessTokenController {
     private String token;
 
     @Inject
-    AccessTokenControllerImpl(@ForApplication Context context, Bus bus) {
+    AccessTokenControllerImpl(@ForApplication SharedPreferences sharedPreferences,
+                              Bus bus) {
         this.bus = bus;
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.sharedPreferences = sharedPreferences;
         if (sharedPreferences.contains(KEY_TOKEN)) {
             token = sharedPreferences.getString(KEY_TOKEN, "");
         }
@@ -55,7 +53,7 @@ public class AccessTokenControllerImpl implements AccessTokenController {
     }
 
     @Override
-    public void remove() {
+    public void clear() {
         if (isAvailable()) {
             token = null;
             sharedPreferences.edit().remove(KEY_TOKEN).apply();

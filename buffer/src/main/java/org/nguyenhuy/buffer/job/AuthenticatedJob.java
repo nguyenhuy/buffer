@@ -2,7 +2,7 @@ package org.nguyenhuy.buffer.job;
 
 import com.path.android.jobqueue.Params;
 import org.nguyenhuy.buffer.api.BufferService;
-import org.nguyenhuy.buffer.controller.UserController;
+import org.nguyenhuy.buffer.controller.AccessTokenController;
 
 import javax.inject.Inject;
 
@@ -13,7 +13,7 @@ import javax.inject.Inject;
  */
 public abstract class AuthenticatedJob extends Job {
     @Inject
-    transient UserController userController;
+    transient AccessTokenController accessTokenController;
     @Inject
     transient BufferService bufferService;
 

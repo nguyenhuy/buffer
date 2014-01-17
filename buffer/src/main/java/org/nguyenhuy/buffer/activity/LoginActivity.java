@@ -6,12 +6,11 @@ import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
-import org.nguyenhuy.buffer.controller.UserController;
-import org.nguyenhuy.buffer.event.UserAvailableEvent;
-import org.nguyenhuy.buffer.event.UserChangedEvent;
+import org.nguyenhuy.buffer.controller.AccessTokenController;
+import org.nguyenhuy.buffer.event.AccessTokenAvailableEvent;
+import org.nguyenhuy.buffer.event.AccessTokenChangedEvent;
 import org.nguyenhuy.buffer.fragment.LoginFragment;
 import org.nguyenhuy.buffer.fragment.OAuthFragment;
-import org.nguyenhuy.buffer.model.user.User;
 import org.nguyenhuy.buffer.module.ForActivity;
 import org.nguyenhuy.buffer.module.LoginActivityModule;
 
@@ -19,7 +18,7 @@ import javax.inject.Inject;
 
 public class LoginActivity extends BaseActivity implements LoginFragment.Delegate, OAuthFragment.Delegate {
     @Inject
-    UserController userController;
+    AccessTokenController accessTokenController;
     @Inject
     @ForActivity
     JobManager jobManager;
@@ -72,19 +71,18 @@ public class LoginActivity extends BaseActivity implements LoginFragment.Delegat
     @Override
     public void oAuthSuccess(String accessToken) {
         getFragmentManager().popBackStackImmediate(null, 0);
-        userController.setUser(new User(accessToken));
+        accessTokenController.set(accessToken);
     }
 
     @Subscribe
-    public void onUserChanged(UserChangedEvent event) {
-        User user = event.getUser();
-        if (user != null && user.isAuthenticated()) {
+    public void onAccessTokenChanged(AccessTokenChangedEvent event) {
+        if (accessTokenController.isAvailable()) {
             startMainActivity();
         }
     }
 
     @Subscribe
-    public void onUserAvailable(UserAvailableEvent event) {
+    public void onAccessTokenAvailable(AccessTokenAvailableEvent event) {
         startMainActivity();
     }
 

@@ -13,7 +13,7 @@ import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
-import org.nguyenhuy.buffer.controller.UserController;
+import org.nguyenhuy.buffer.controller.AccessTokenController;
 import org.nguyenhuy.buffer.event.*;
 import org.nguyenhuy.buffer.model.user.Profile;
 import org.nguyenhuy.buffer.module.ForActivity;
@@ -36,7 +36,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     @ForActivity
     JobManager jobManager;
     @Inject
-    UserController userController;
+    AccessTokenController accessTokenController;
     @Inject
     ProfilesController profilesController;
 
@@ -122,8 +122,8 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     @Subscribe
-    public void onUserChanged(UserChangedEvent event) {
-        if (event.getUser() == null || !event.getUser().isAuthenticated()) {
+    public void onAccessTokenChanged(AccessTokenChangedEvent event) {
+        if (accessTokenController.isAvailable()) {
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
             finish();
@@ -155,8 +155,8 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     private void logout() {
         configurationController.removeConfiguration();
-        userController.removeUser();
-        // Expect to receive UserChangedEvent after this point, so LoginActivity
+        accessTokenController.remove();
+        // Expect to receive AccessTokenChangedEvent after this point, so LoginActivity
         // will be started.
     }
 

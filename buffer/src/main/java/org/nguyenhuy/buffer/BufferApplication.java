@@ -2,7 +2,7 @@ package org.nguyenhuy.buffer;
 
 import android.app.Application;
 import dagger.ObjectGraph;
-import org.nguyenhuy.buffer.controller.UserController;
+import org.nguyenhuy.buffer.controller.AccessTokenController;
 import org.nguyenhuy.buffer.module.ApplicationModule;
 
 import javax.inject.Inject;
@@ -13,20 +13,20 @@ import javax.inject.Inject;
 public class BufferApplication extends Application {
     private ObjectGraph applicationGraph;
     @Inject
-    UserController userController;
+    AccessTokenController accessTokenController;
 
     @Override
     public void onCreate() {
         super.onCreate();
         applicationGraph = ObjectGraph.create(new ApplicationModule(this));
         applicationGraph.inject(this);
-        userController.onStart();
+        accessTokenController.onStart();
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
-        userController.onStop();
+        accessTokenController.onStop();
     }
 
     public ObjectGraph getApplicationGraph() {

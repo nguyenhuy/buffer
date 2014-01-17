@@ -25,8 +25,8 @@ public class GetProfilesJob extends AuthenticatedJob {
 
     @Override
     public void onRun() throws Throwable {
-        LogUtils.v("GetProfile: " + userController);
-        final List<Profile> profiles = bufferService.getProfiles(userController.getUser().getAccessToken());
+        LogUtils.v("GetProfile: " + accessTokenController);
+        final List<Profile> profiles = bufferService.getProfiles(accessTokenController.get());
         LogUtils.v("GetProfile: " + profiles);
         mainHandler.post(new Runnable() {
             @Override

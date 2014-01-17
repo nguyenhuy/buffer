@@ -3,17 +3,13 @@ package org.nguyenhuy.buffer.module;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 import dagger.Module;
 import dagger.Provides;
 import org.nguyenhuy.buffer.BufferApplication;
-import org.nguyenhuy.buffer.api.BufferService;
-import org.nguyenhuy.buffer.controller.ConfigurationController;
-import org.nguyenhuy.buffer.controller.UserController;
-import org.nguyenhuy.buffer.controller.UserControllerImpl;
-import retrofit.RestAdapter;
+import org.nguyenhuy.buffer.controller.AccessTokenControllerImpl;
+import org.nguyenhuy.buffer.controller.AccessTokenController;
 
 import javax.inject.Singleton;
 
@@ -42,7 +38,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    UserController provideUserController(UserControllerImpl impl) {
+    AccessTokenController provideUserController(AccessTokenControllerImpl impl) {
         return impl;
     }
 

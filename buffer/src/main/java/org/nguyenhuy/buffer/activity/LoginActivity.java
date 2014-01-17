@@ -20,8 +20,6 @@ import javax.inject.Inject;
 
 public class LoginActivity extends BaseActivity implements LoginFragment.Delegate, OAuthFragment.Delegate {
     @Inject
-    Bus bus;
-    @Inject
     UserController userController;
     @Inject
     @ForActivity
@@ -42,14 +40,12 @@ public class LoginActivity extends BaseActivity implements LoginFragment.Delegat
     @Override
     protected void onStart() {
         super.onStart();
-        bus.register(this);
         jobManager.start();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        bus.unregister(this);
         jobManager.stop();
     }
 

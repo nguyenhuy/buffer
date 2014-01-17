@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
@@ -35,8 +34,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     @Inject
     @ForActivity
     JobManager jobManager;
-    @Inject
-    Bus bus;
     @Inject
     UserController userController;
 
@@ -77,7 +74,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     @Override
     protected void onStart() {
         super.onStart();
-        bus.register(this);
         configurationController.onStart();
         jobManager.start();
         configurationController.loadConfiguration();
@@ -93,7 +89,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     @Override
     protected void onStop() {
         super.onStop();
-        bus.unregister(this);
         configurationController.onStop();
         jobManager.stop();
     }

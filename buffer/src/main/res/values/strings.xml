@@ -11,8 +11,8 @@
 
     <string name="title_button_login">Sign in</string>
 
-    <string name="prompt_oauth_failed">OAuth failed :(</string>
-    <string name="prompt_get_configuration_failed">Failed to get configuration.</string>
-    <string name="prompt_get_profiles_failed">Failed to get profiles.</string>
+    <string name="prompt_failed_to_oauth">OAuth failed :(</string>
+    <string name="prompt_failed_to_get_configuration">Failed to get configuration.</string>
+    <string name="prompt_failed_to_get_profiles">Failed to get profiles.</string>
 
 </resources>

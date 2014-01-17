@@ -64,7 +64,7 @@ public class LoginActivity extends BaseActivity implements LoginFragment.Delegat
 
     @Override
     public void oAuthFailed() {
-        Toast.makeText(this, R.string.prompt_oauth_failed, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.prompt_failed_to_oauth, Toast.LENGTH_LONG).show();
         getFragmentManager().popBackStackImmediate(null, 0);
     }
 

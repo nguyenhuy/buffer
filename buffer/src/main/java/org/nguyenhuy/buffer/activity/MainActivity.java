@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     @Subscribe
     public void onFailedToGetConfiguration(FailedToGetConfigurationEvent event) {
-        Toast.makeText(this, R.string.prompt_get_configuration_failed, Toast.LENGTH_LONG)
+        Toast.makeText(this, R.string.prompt_failed_to_get_configuration, Toast.LENGTH_LONG)
                 .show();
     }
 
@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     @Subscribe
     public void onFailedToGetProfiles(FailedToGetProfilesEvent event) {
-        Toast.makeText(this, R.string.prompt_get_profiles_failed, Toast.LENGTH_LONG)
+        Toast.makeText(this, R.string.prompt_failed_to_get_profiles, Toast.LENGTH_LONG)
                 .show();
     }
 

@@ -133,7 +133,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     @Subscribe
     public void onAccessTokenChanged(AccessTokenChangedEvent event) {
-        if (accessTokenController.isAvailable()) {
+        if (!accessTokenController.isAvailable()) {
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
             finish();

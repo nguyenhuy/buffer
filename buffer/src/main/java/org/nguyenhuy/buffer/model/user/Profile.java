@@ -45,4 +45,9 @@ public class Profile {
     public String getService() {
         return service;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Profile && id.equals(((Profile) o).id);
+    }
 }

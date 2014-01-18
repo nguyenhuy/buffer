@@ -198,20 +198,36 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     private void setUpDropDownList(List<Profile> profiles) {
-        profilesAdapter = profileAdapterProvider.get();
+        final ActionBar actionBar = getActionBar();
+        boolean firstSetup = actionBar.getNavigationMode() != ActionBar.NAVIGATION_MODE_LIST;
+        Profile previousProfile = null;
+
+        if (firstSetup) {
+            // Set up the action bar to show a dropdown list.
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            profilesAdapter = profileAdapterProvider.get();
+        } else {
+            // It's already a drop down list. So some profiles are being showed.
+            // Let's remeber the previous selected one.
+            previousProfile = profilesAdapter.getItem(actionBar.getSelectedNavigationIndex());
+            profilesAdapter.clear();
+        }
+
         profilesAdapter.addAll(profiles);
         if (serviceIcons != null) {
             profilesAdapter.setServiceIcons(serviceIcons);
         }
 
-        // Set up the action bar to show a dropdown list.
-        final ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-
-        // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(profilesAdapter, this);
+        if (firstSetup) {
+            actionBar.setListNavigationCallbacks(profilesAdapter, this);
+        } else {
+            int newPosition = profilesAdapter.getPosition(previousProfile);
+            if (newPosition >= 0 && newPosition < profilesAdapter.getCount()) {
+                actionBar.setSelectedNavigationItem(newPosition);
+            }
+        }
     }
 
     @Override

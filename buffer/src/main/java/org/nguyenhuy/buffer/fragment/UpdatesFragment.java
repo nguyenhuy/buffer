@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.delegate.InjectDelegate;
 import org.nguyenhuy.buffer.event.*;
@@ -44,6 +42,7 @@ public abstract class UpdatesFragment extends ListFragment {
     JobManager jobManager;
     private Delegate delegate;
     private ArrayAdapter<Update> listAdapter;
+    private View emptyView;
     private View progressContainer;
     private View footerProgressView;
     private boolean isLoading;
@@ -64,6 +63,7 @@ public abstract class UpdatesFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        emptyView = view.findViewById(android.R.id.empty);
         progressContainer = view.findViewById(R.id.progress_container);
         getListView().setOnScrollListener(new EndlessOnScrollListener(ITEMS_VISIBLE_THRESHOLD) {
             @Override
@@ -173,8 +173,12 @@ public abstract class UpdatesFragment extends ListFragment {
     }
 
     private void updateProgress() {
+        emptyView.setVisibility(View.GONE);
+        progressContainer.setVisibility(View.GONE);
+        footerProgressView.setVisibility(View.GONE);
+        getListView().setVisibility(View.GONE);
+
         if (isLoading && listAdapter.getCount() > 0) {
-            progressContainer.setVisibility(View.GONE);
             footerProgressView.setVisibility(View.VISIBLE);
             getListView().setVisibility(View.VISIBLE);
             return;
@@ -182,13 +186,14 @@ public abstract class UpdatesFragment extends ListFragment {
 
         if (isLoading) {
             progressContainer.setVisibility(View.VISIBLE);
-            footerProgressView.setVisibility(View.GONE);
-            getListView().setVisibility(View.GONE);
             return;
         }
 
-        progressContainer.setVisibility(View.GONE);
-        footerProgressView.setVisibility(View.GONE);
+        if (listAdapter.getCount() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            return;
+        }
+
         getListView().setVisibility(View.VISIBLE);
     }
 

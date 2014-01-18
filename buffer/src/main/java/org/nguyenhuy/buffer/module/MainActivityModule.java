@@ -13,7 +13,7 @@ import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;
 import org.nguyenhuy.buffer.activity.MainActivity;
-import org.nguyenhuy.buffer.adapter.UpdatesFragmentsPagerAdapter;
+import org.nguyenhuy.buffer.adapter.UpdatesFragmentPagerAdapter;
 import org.nguyenhuy.buffer.api.BufferService;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
@@ -106,7 +106,7 @@ public class MainActivityModule {
     }
 
     @Provides
-    PagerAdapter providePagerAdapter(UpdatesFragmentsPagerAdapter adapter) {
+    PagerAdapter providePagerAdapter(UpdatesFragmentPagerAdapter adapter) {
         return adapter;
     }
 }

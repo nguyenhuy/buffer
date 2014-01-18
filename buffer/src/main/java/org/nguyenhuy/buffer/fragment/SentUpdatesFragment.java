@@ -2,19 +2,16 @@ package org.nguyenhuy.buffer.fragment;
 
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
+import org.nguyenhuy.buffer.adapter.PendingUpdatesAdapter;
 import org.nguyenhuy.buffer.adapter.UpdatesAdapter;
 import org.nguyenhuy.buffer.event.ChangedProfileEvent;
 import org.nguyenhuy.buffer.event.FailedToGetUpdatesEvent;
 import org.nguyenhuy.buffer.event.GettingUpdatesEvent;
 import org.nguyenhuy.buffer.event.GotUpdatesEvent;
 import org.nguyenhuy.buffer.model.user.Update;
-
-import javax.inject.Inject;
 
 /**
  * Created by nguyenthanhhuy on 1/18/14.
@@ -23,7 +20,7 @@ public class SentUpdatesFragment extends UpdatesFragment {
 
     @Override
     protected ArrayAdapter<Update> initAdapter() {
-        return new UpdatesAdapter(getActivity());
+        return new PendingUpdatesAdapter(getActivity());
     }
 
     @Override

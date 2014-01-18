@@ -7,4 +7,6 @@
     <dimen name="profile_avatar_height">32dp</dimen>
     <dimen name="profile_avatar_margin">4dp</dimen>
 
+    <dimen name="media_thumbnail_height">100dp</dimen>
+
 </resources>

@@ -14,11 +14,11 @@ import javax.inject.Inject;
 /**
  * Created by nguyenthanhhuy on 1/18/14.
  */
-public class UpdatesFragmentsPagerAdapter extends FragmentPagerAdapter {
+public class UpdatesFragmentPagerAdapter extends FragmentPagerAdapter {
     private Context context;
 
     @Inject
-    UpdatesFragmentsPagerAdapter(@ForActivity Context context, FragmentManager fm) {
+    UpdatesFragmentPagerAdapter(@ForActivity Context context, FragmentManager fm) {
         super(fm);
         this.context = context;
     }

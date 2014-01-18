@@ -2,12 +2,17 @@ package org.nguyenhuy.buffer.model.user;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Map;
+
 /**
  * Created by nguyenthanhhuy on 1/18/14.
  */
 public class Update {
     public static final String STATUS_PENDING = "buffer";
     public static final String STATUS_SENT = "sent";
+
+    public static final String MEDIA_KEY_THUMBNAIL = "thumbnail";
+    public static final String MEDIA_KEY_PICTURE = "picture";
 
     private String id;
     @SerializedName("created_at")
@@ -16,7 +21,7 @@ public class Update {
     private long dueDate;
     private String day;
     @SerializedName("due_time")
-    private String due_time;
+    private String dueTime;
     @SerializedName("profile_id")
     private String profileId;
     @SerializedName("profile_service")
@@ -32,9 +37,22 @@ public class Update {
     @SerializedName("user_id")
     private String userId;
     private String via;
+    @SerializedName("media")
+    private Map<String, String> medias;
 
-    @Override
-    public String toString() {
+    public String getFormattedText() {
         return formattedText;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public String getDueTime() {
+        return dueTime;
+    }
+
+    public Map<String, String> getMedias() {
+        return medias;
     }
 }

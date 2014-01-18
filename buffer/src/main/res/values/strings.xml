@@ -9,10 +9,16 @@
     <string name="title_activity_login">Buffer</string>
     <string name="title_activity_main">MainActivity</string>
 
+    <string name="title_fragment_pending_updates">Buffer</string>
+    <string name="title_fragment_pending_sent">Analytics</string>
+
     <string name="title_button_login">Sign in</string>
 
     <string name="prompt_failed_to_oauth">OAuth failed :(</string>
     <string name="prompt_failed_to_get_configuration">Failed to get configuration.</string>
     <string name="prompt_failed_to_get_profiles">Failed to get profiles.</string>
+    <string name="prompt_failed_to_get_updates">Failed to get some updates.</string>
+
+    <string name="prompt_no_updates">No updates. Do something, dude :)</string>
 
 </resources>

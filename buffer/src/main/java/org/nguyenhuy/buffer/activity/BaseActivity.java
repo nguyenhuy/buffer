@@ -5,13 +5,14 @@ import android.os.Bundle;
 import com.squareup.otto.Bus;
 import dagger.ObjectGraph;
 import org.nguyenhuy.buffer.BufferApplication;
+import org.nguyenhuy.buffer.delegate.InjectDelegate;
 
 import javax.inject.Inject;
 
 /**
  * Created by nguyenthanhhuy on 1/15/14.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity implements InjectDelegate {
     private ObjectGraph objectGraph;
     @Inject
     protected Bus bus;
@@ -37,6 +38,7 @@ public abstract class BaseActivity extends Activity {
         bus.unregister(this);
     }
 
+    @Override
     public void inject(Object object) {
         objectGraph.inject(object);
     }

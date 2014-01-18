@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Created by nguyenthanhhuy on 1/17/14.
  */
-public class ProfileAdapter extends ArrayAdapter<Profile> {
+public class ProfilesAdapter extends ArrayAdapter<Profile> {
     private LayoutInflater layoutInflater;
     /**
      * A map contains URL of icon for supported services. Keys are service names
@@ -29,7 +29,7 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
     private Map<String, String> serviceIcons;
 
     @Inject
-    ProfileAdapter(@ForActivity Context context, LayoutInflater layoutInflater) {
+    ProfilesAdapter(@ForActivity Context context, LayoutInflater layoutInflater) {
         super(context, 0);
         this.layoutInflater = layoutInflater;
     }

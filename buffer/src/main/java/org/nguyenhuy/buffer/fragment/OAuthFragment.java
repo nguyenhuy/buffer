@@ -16,6 +16,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
 import org.nguyenhuy.buffer.api.ApiConstants;
+import org.nguyenhuy.buffer.delegate.InjectDelegate;
 import org.nguyenhuy.buffer.event.FailedToGetAccessTokenEvent;
 import org.nguyenhuy.buffer.event.GotAccessTokenEvent;
 import org.nguyenhuy.buffer.job.GetAccessTokenJob;
@@ -30,9 +31,7 @@ import javax.inject.Inject;
  */
 public class OAuthFragment extends Fragment {
 
-    public interface Delegate {
-        void inject(Object object);
-
+    public interface Delegate extends InjectDelegate {
         void oAuthFailed();
 
         void oAuthSuccess(String accessToken);

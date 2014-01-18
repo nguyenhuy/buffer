@@ -1,20 +1,23 @@
 package org.nguyenhuy.buffer.activity;
 
 import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.TextView;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.Window;
 import android.widget.Toast;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Subscribe;
 import org.nguyenhuy.buffer.R;
-import org.nguyenhuy.buffer.adapter.ProfileAdapter;
+import org.nguyenhuy.buffer.adapter.ProfilesAdapter;
 import org.nguyenhuy.buffer.controller.AccessTokenController;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
 import org.nguyenhuy.buffer.event.*;
+import org.nguyenhuy.buffer.fragment.UpdatesFragment;
 import org.nguyenhuy.buffer.model.configuration.Service;
 import org.nguyenhuy.buffer.model.user.Profile;
 import org.nguyenhuy.buffer.module.ForActivity;
@@ -26,7 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener {
+public class MainActivity extends BaseActivity implements ActionBar.OnNavigationListener,
+        UpdatesFragment.Delegate {
 
     /**
      * The serialization (saved instance state) Bundle key representing the
@@ -44,9 +48,11 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     @Inject
     ProfilesController profilesController;
     @Inject
-    Provider<ProfileAdapter> profileAdapterProvider;
+    Provider<ProfilesAdapter> profileAdapterProvider;
+    @Inject
+    PagerAdapter pagerAdapter;
     private int loadingCounter;
-    private ProfileAdapter profileAdapter;
+    private ProfilesAdapter profilesAdapter;
     private Map<String, String> serviceIcons;
 
     @Override
@@ -54,6 +60,9 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override
@@ -115,16 +124,6 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     @Override
-    public boolean onNavigationItemSelected(int position, long id) {
-        // When the given dropdown item is selected, show its contents in the
-        // container view.
-        getFragmentManager().beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
-        return true;
-    }
-
-    @Override
     protected Object[] getModules() {
         return new Object[]{
                 new MainActivityModule(this)
@@ -158,8 +157,8 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
             Service service = entry.getValue();
             serviceIcons.put(serviceName, service.getIcon());
         }
-        if (profileAdapter != null) {
-            profileAdapter.setServiceIcons(serviceIcons);
+        if (profilesAdapter != null) {
+            profilesAdapter.setServiceIcons(serviceIcons);
         }
     }
 
@@ -199,10 +198,10 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     }
 
     private void setUpDropDownList(List<Profile> profiles) {
-        profileAdapter = profileAdapterProvider.get();
-        profileAdapter.addAll(profiles);
+        profilesAdapter = profileAdapterProvider.get();
+        profilesAdapter.addAll(profiles);
         if (serviceIcons != null) {
-            profileAdapter.setServiceIcons(serviceIcons);
+            profilesAdapter.setServiceIcons(serviceIcons);
         }
 
         // Set up the action bar to show a dropdown list.
@@ -212,7 +211,21 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
         // Set up the dropdown list navigation in the action bar.
-        actionBar.setListNavigationCallbacks(profileAdapter, this);
+        actionBar.setListNavigationCallbacks(profilesAdapter, this);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int position, long id) {
+        // When the given dropdown item is selected, show its contents in the
+        // container view.
+        bus.post(new ChangedProfileEvent(profilesAdapter.getItem(position)));
+        return true;
+    }
+
+    @Override
+    public String getCurrentProfileId() {
+        return profilesAdapter.getItem(getActionBar().getSelectedNavigationIndex())
+                .getId();
     }
 
     private void showLoadingIndicator() {
@@ -228,40 +241,4 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
             setProgressBarIndeterminateVisibility(false);
         }
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
 }

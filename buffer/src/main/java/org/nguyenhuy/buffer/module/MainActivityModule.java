@@ -1,7 +1,9 @@
 package org.nguyenhuy.buffer.module;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import com.path.android.jobqueue.BaseJob;
 import com.path.android.jobqueue.JobManager;
@@ -11,11 +13,15 @@ import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.Provides;
 import org.nguyenhuy.buffer.activity.MainActivity;
+import org.nguyenhuy.buffer.adapter.UpdatesFragmentsPagerAdapter;
 import org.nguyenhuy.buffer.api.BufferService;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
+import org.nguyenhuy.buffer.fragment.PendingUpdatesFragment;
+import org.nguyenhuy.buffer.fragment.SentUpdatesFragment;
 import org.nguyenhuy.buffer.job.GetConfigurationJob;
 import org.nguyenhuy.buffer.job.GetProfilesJob;
+import org.nguyenhuy.buffer.job.GetUpdatesJob;
 import retrofit.RestAdapter;
 
 import javax.inject.Singleton;
@@ -26,8 +32,11 @@ import javax.inject.Singleton;
 @Module(
         injects = {
                 MainActivity.class,
+                PendingUpdatesFragment.class,
+                SentUpdatesFragment.class,
                 GetConfigurationJob.class,
-                GetProfilesJob.class
+                GetProfilesJob.class,
+                GetUpdatesJob.class
         },
         complete = false
 )
@@ -39,7 +48,6 @@ public class MainActivityModule {
     }
 
     @Provides
-    @Singleton
     @ForActivity
     Context provideContext() {
         return activity;
@@ -88,8 +96,17 @@ public class MainActivityModule {
     }
 
     @Provides
-    @Singleton
     LayoutInflater provideLayoutInflater() {
         return LayoutInflater.from(activity);
+    }
+
+    @Provides
+    FragmentManager providerFragmentManager() {
+        return activity.getFragmentManager();
+    }
+
+    @Provides
+    PagerAdapter providePagerAdapter(UpdatesFragmentsPagerAdapter adapter) {
+        return adapter;
     }
 }

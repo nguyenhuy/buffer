@@ -32,7 +32,6 @@ public class ApplicationModule {
     }
 
     @Provides
-    @Singleton
     @ForApplication
     Context provideApplicationContext() {
         return application;
@@ -56,7 +55,6 @@ public class ApplicationModule {
     }
 
     @Provides
-    @Singleton
     @ForApplication
     SharedPreferences provideDefaultSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(application);

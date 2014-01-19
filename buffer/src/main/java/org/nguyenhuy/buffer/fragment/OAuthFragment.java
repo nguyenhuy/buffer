@@ -2,6 +2,7 @@ package org.nguyenhuy.buffer.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import org.nguyenhuy.buffer.event.FailedToGetAccessTokenEvent;
 import org.nguyenhuy.buffer.event.GotAccessTokenEvent;
 import org.nguyenhuy.buffer.job.GetAccessTokenJob;
 import org.nguyenhuy.buffer.module.ForActivity;
+import org.nguyenhuy.buffer.util.LogUtils;
 import org.scribe.model.Verifier;
 import org.scribe.oauth.OAuthService;
 
@@ -73,13 +75,16 @@ public class OAuthFragment extends Fragment {
         // showed for text boxes.
         webView.requestFocus(View.FOCUS_DOWN);
         webView.setWebViewClient(new WebViewClient() {
+            private boolean isLoadingPage;
+
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                LogUtils.v("Should override: " + url);
                 if (!url.startsWith(apiConstants.getCallback())) {
-                    showProgress(true);
                     return false;
                 }
 
+                isLoadingPage = false;
                 Uri uri = Uri.parse(url);
                 String error = uri.getQueryParameter("error");
                 if (!TextUtils.isEmpty(error)) {
@@ -96,9 +101,21 @@ public class OAuthFragment extends Fragment {
             }
 
             @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                LogUtils.v("Page started: " + url);
+                showProgress(true);
+                isLoadingPage = true;
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                showProgress(false);
+                LogUtils.v("Page finished: " + url);
+                if (isLoadingPage) {
+                    showProgress(false);
+                    isLoadingPage = false;
+                }
             }
         });
 

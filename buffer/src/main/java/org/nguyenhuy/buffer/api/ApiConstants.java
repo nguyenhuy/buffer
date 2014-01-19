@@ -13,6 +13,6 @@ public class ApiConstants {
     }
 
     public String getCallback() {
-        return "http://nguyenhuy.org";
+        return "https://github.com/nguyenhuy";
     }
 }

@@ -1,7 +1,7 @@
 buffer
 ======
 
-Buffer Android client
+Buffer Android client. Download v0.1 [here][14].
 
 Why spend time on this:
 =======================
@@ -84,4 +84,4 @@ Cache policies:
  [11]: https://github.com/nguyenhuy/buffer/blob/master/buffer/src/main/java/org/nguyenhuy/buffer/controller/ProfilesController.java
  [12]: https://github.com/nguyenhuy/buffer/blob/master/buffer/src/main/java/org/nguyenhuy/buffer/controller/UpdatesController.java
  [13]: https://github.com/nguyenhuy/buffer/blob/master/buffer/src/main/java/org/nguyenhuy/buffer/job/JobPriority.java
-
+ [14]: https://github.com/nguyenhuy/buffer/releases

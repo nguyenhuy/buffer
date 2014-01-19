@@ -9,9 +9,11 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -42,6 +44,7 @@ public class OAuthFragment extends Fragment {
     private Delegate delegate;
     private WebView webView;
     private View progressContainer;
+    private TextView progressText;
     @Inject
     Bus bus;
     @Inject
@@ -71,6 +74,7 @@ public class OAuthFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         webView = (WebView) view.findViewById(R.id.webview);
         progressContainer = view.findViewById(R.id.progress_container);
+        progressText = (TextView) view.findViewById(R.id.progress_text);
         // Request focus for the webview, otherwise soft keyboard won't be
         // showed for text boxes.
         webView.requestFocus(View.FOCUS_DOWN);
@@ -90,7 +94,7 @@ public class OAuthFragment extends Fragment {
                 if (!TextUtils.isEmpty(error)) {
                     delegate.oAuthFailed();
                 } else {
-                    showProgress(true);
+                    showProgress(true, true);
                     String code = uri.getQueryParameter("code");
                     Verifier verifier = new Verifier(code);
                     GetAccessTokenJob job = new GetAccessTokenJob(verifier);
@@ -104,7 +108,7 @@ public class OAuthFragment extends Fragment {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 LogUtils.v("Page started: " + url);
-                showProgress(true);
+                showProgress(true, false);
                 isLoadingPage = true;
             }
 
@@ -113,9 +117,16 @@ public class OAuthFragment extends Fragment {
                 super.onPageFinished(view, url);
                 LogUtils.v("Page finished: " + url);
                 if (isLoadingPage) {
-                    showProgress(false);
+                    showProgress(false, false);
                     isLoadingPage = false;
                 }
+            }
+        });
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                progressText.setText(newProgress + "%");
             }
         });
 
@@ -161,12 +172,14 @@ public class OAuthFragment extends Fragment {
         webView.destroy();
     }
 
-    private void showProgress(boolean loading) {
+    private void showProgress(boolean loading, boolean intermediate) {
         if (loading) {
             progressContainer.setVisibility(View.VISIBLE);
+            progressText.setVisibility(intermediate ? View.GONE : View.VISIBLE);
             webView.setVisibility(View.GONE);
         } else {
             progressContainer.setVisibility(View.GONE);
+            progressText.setVisibility(View.GONE);
             webView.setVisibility(View.VISIBLE);
         }
     }

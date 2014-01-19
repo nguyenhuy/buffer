@@ -1,6 +1,8 @@
 package org.nguyenhuy.buffer.adapter;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +45,14 @@ public class PendingUpdatesAdapter extends ArrayAdapter<Update> {
         }
 
         Update update = getItem(position);
-        viewHolder.formattedText.setText(update.getFormattedText());
+
+        Spanned styledText = update.getStyledText();
+        if (styledText == null) {
+            styledText = Html.fromHtml(update.getFormattedText());
+            update.setStyledText(styledText);
+        }
+
+        viewHolder.formattedText.setText(styledText);
         viewHolder.dueDateText.setText(update.getDay() + " " + update.getDueTime());
 
         Map<String, String> medias = update.getMedias();

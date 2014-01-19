@@ -1,5 +1,6 @@
 package org.nguyenhuy.buffer.model.user;
 
+import android.text.Spanned;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Map;
@@ -40,6 +41,8 @@ public class Update {
     @SerializedName("media")
     private Map<String, String> medias;
 
+    private transient Spanned styledText;
+
     public String getFormattedText() {
         return formattedText;
     }
@@ -54,5 +57,13 @@ public class Update {
 
     public Map<String, String> getMedias() {
         return medias;
+    }
+
+    public Spanned getStyledText() {
+        return styledText;
+    }
+
+    public void setStyledText(Spanned styledText) {
+        this.styledText = styledText;
     }
 }

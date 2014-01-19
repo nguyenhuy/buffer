@@ -253,6 +253,9 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
     private void hideLoadingIndicator() {
         --loadingCounter;
+        if (loadingCounter < 0) {
+            loadingCounter = 0;
+        }
         if (loadingCounter == 0) {
             setProgressBarIndeterminateVisibility(false);
         }

@@ -9,16 +9,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.path.android.jobqueue.Job;
-import com.path.android.jobqueue.JobManager;
 import com.squareup.otto.Bus;
 import org.nguyenhuy.buffer.R;
+import org.nguyenhuy.buffer.controller.UpdatesController;
 import org.nguyenhuy.buffer.delegate.InjectDelegate;
 import org.nguyenhuy.buffer.event.*;
-import org.nguyenhuy.buffer.job.GetUpdatesJob;
 import org.nguyenhuy.buffer.listener.EndlessOnScrollListener;
 import org.nguyenhuy.buffer.model.user.Update;
-import org.nguyenhuy.buffer.module.ForActivity;
 
 import javax.inject.Inject;
 
@@ -38,8 +35,7 @@ public abstract class UpdatesFragment extends ListFragment {
     @Inject
     Bus bus;
     @Inject
-    @ForActivity
-    JobManager jobManager;
+    UpdatesController updatesController;
     private Delegate delegate;
     private ArrayAdapter<Update> listAdapter;
     private View emptyView;
@@ -126,9 +122,8 @@ public abstract class UpdatesFragment extends ListFragment {
 
     protected void loadMore() {
         if (!loadedAllUpdates && !isLoading) {
-            Job job = new GetUpdatesJob(delegate.getCurrentProfileId(),
-                    getStatusOfUpdates(), ++currentPage, ITEMS_PER_PAGE);
-            jobManager.addJobInBackground(job);
+            updatesController.load(delegate.getCurrentProfileId(),
+                    getStatusOfUpdates(), currentPage + 1, ITEMS_PER_PAGE);
         }
     }
 

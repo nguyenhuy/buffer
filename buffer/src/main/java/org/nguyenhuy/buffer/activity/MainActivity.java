@@ -57,6 +57,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     private int loadingCounter;
     private ProfilesAdapter profilesAdapter;
     private Map<String, String> serviceIcons;
+    private boolean isCreated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,8 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         viewPager.setAdapter(pagerAdapter);
+
+        isCreated = true;
     }
 
     @Override
@@ -84,8 +87,14 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         configurationController.onStart();
         profilesController.onStart();
         updatesController.onStart();
-        configurationController.load();
-        profilesController.load();
+
+        // Only load user data if this activity is newly created.
+        // Otherwise the data is still in memory.
+        if (isCreated) {
+            configurationController.load();
+            profilesController.load();
+            isCreated = false;
+        }
     }
 
     @Override

@@ -47,8 +47,8 @@ Job priorities:
 
 Cache policies:
 ===============
-- [`AccessTokenController`][9]: data is cached to persistent store. No other fancy things since we can’t get access token automatically.
-- [`ConfigurationController`][10]: data is cached in memory and saved to persistent store.
+- [`AccessTokenController`][9]: data is cached in memory and persistent store. No other fancy things since we can’t get access token automatically.
+- [`ConfigurationController`][10]: data is cached in memory and persistent store.
   - In constructor: 
     - Load data from persistent store and save to memory.
   - When data is requested:
@@ -56,7 +56,7 @@ Cache policies:
     - If it is not in memory, it will be loaded from network by an UI job and saved. Subscribers will be notified again.
   - Reason for this policy:
     - Configuration is not frequently changed so only make network call if the data is unavailable.
-- [`ProfilesController`][11]: data is cached in memory and saved to persistent store, but is always synced with server:
+- [`ProfilesController`][11]: data is cached in memory and persistent store, but is always synced with server:
   - In constructor:
     - Load data from persistent store and save to memory.
   - When data is requested:

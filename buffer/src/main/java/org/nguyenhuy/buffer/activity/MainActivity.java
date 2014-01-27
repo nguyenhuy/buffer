@@ -16,6 +16,7 @@ import org.nguyenhuy.buffer.adapter.ProfilesAdapter;
 import org.nguyenhuy.buffer.controller.AccessTokenController;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
+import org.nguyenhuy.buffer.controller.UpdatesController;
 import org.nguyenhuy.buffer.event.*;
 import org.nguyenhuy.buffer.fragment.UpdatesFragment;
 import org.nguyenhuy.buffer.model.configuration.Service;
@@ -51,6 +52,8 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     Provider<ProfilesAdapter> profileAdapterProvider;
     @Inject
     PagerAdapter pagerAdapter;
+    @Inject
+    UpdatesController updatesController;
     private int loadingCounter;
     private ProfilesAdapter profilesAdapter;
     private Map<String, String> serviceIcons;
@@ -80,6 +83,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         jobManager.start();
         configurationController.onStart();
         profilesController.onStart();
+        updatesController.onStart();
         configurationController.load();
         profilesController.load();
     }
@@ -100,6 +104,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
         jobManager.stop();
         configurationController.onStop();
         profilesController.onStop();
+        updatesController.onStop();
     }
 
     @Override
@@ -191,6 +196,7 @@ public class MainActivity extends BaseActivity implements ActionBar.OnNavigation
     private void logout() {
         configurationController.clear();
         profilesController.clear();
+        updatesController.clear();
         accessTokenController.clear();
         // Expect to receive AccessTokenChangedEvent after this point, so LoginActivity
         // will be started.

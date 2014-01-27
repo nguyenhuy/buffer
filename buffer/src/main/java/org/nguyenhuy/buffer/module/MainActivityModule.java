@@ -17,6 +17,7 @@ import org.nguyenhuy.buffer.adapter.UpdatesFragmentPagerAdapter;
 import org.nguyenhuy.buffer.api.BufferService;
 import org.nguyenhuy.buffer.controller.ConfigurationController;
 import org.nguyenhuy.buffer.controller.ProfilesController;
+import org.nguyenhuy.buffer.controller.UpdatesController;
 import org.nguyenhuy.buffer.fragment.PendingUpdatesFragment;
 import org.nguyenhuy.buffer.fragment.SentUpdatesFragment;
 import org.nguyenhuy.buffer.job.GetConfigurationJob;
@@ -69,6 +70,13 @@ public class MainActivityModule {
             Bus bus,
             @ForApplication SharedPreferences sharedPreferences) {
         return new ProfilesController(bus, jobManager, sharedPreferences);
+    }
+
+    @Provides
+    @Singleton
+    UpdatesController provideUpdatesController(@ForActivity JobManager jobManager,
+                                               Bus bus) {
+        return new UpdatesController(jobManager, bus);
     }
 
     @Provides

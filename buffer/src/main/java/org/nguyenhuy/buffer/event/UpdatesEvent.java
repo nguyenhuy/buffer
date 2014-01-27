@@ -1,22 +1,18 @@
 package org.nguyenhuy.buffer.event;
 
+import org.nguyenhuy.buffer.model.request.UpdatesRequest;
+
 /**
  * Created by nguyenthanhhuy on 1/18/14.
  */
 public abstract class UpdatesEvent {
-    private String profileId;
-    private String status;
+    private UpdatesRequest request;
 
-    protected UpdatesEvent(String profileId, String status) {
-        this.profileId = profileId;
-        this.status = status;
+    protected UpdatesEvent(UpdatesRequest request) {
+        this.request = request;
     }
 
-    public String getProfileId() {
-        return profileId;
-    }
-
-    public String getStatus() {
-        return status;
+    public UpdatesRequest getRequest() {
+        return request;
     }
 }

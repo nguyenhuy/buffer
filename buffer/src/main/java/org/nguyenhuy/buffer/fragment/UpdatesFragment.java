@@ -15,6 +15,7 @@ import org.nguyenhuy.buffer.controller.UpdatesController;
 import org.nguyenhuy.buffer.delegate.InjectDelegate;
 import org.nguyenhuy.buffer.event.*;
 import org.nguyenhuy.buffer.listener.EndlessOnScrollListener;
+import org.nguyenhuy.buffer.model.request.UpdatesRequest;
 import org.nguyenhuy.buffer.model.user.Update;
 
 import javax.inject.Inject;
@@ -79,7 +80,7 @@ public abstract class UpdatesFragment extends ListFragment {
 
             @Override
             public void loadMoreResults() {
-                loadMore();
+                loadUpdatesOfNextPage();
             }
         });
     }
@@ -120,10 +121,12 @@ public abstract class UpdatesFragment extends ListFragment {
         }
     }
 
-    protected void loadMore() {
+    protected void loadUpdatesOfNextPage() {
         if (!loadedAllUpdates && !isLoading) {
-            updatesController.load(delegate.getCurrentProfileId(),
-                    getStatusOfUpdates(), currentPage + 1, ITEMS_PER_PAGE);
+            UpdatesRequest request = new UpdatesRequest(
+                    delegate.getCurrentProfileId(), getStatusOfUpdates(),
+                    currentPage + 1, ITEMS_PER_PAGE);
+            updatesController.load(request);
         }
     }
 
@@ -139,7 +142,7 @@ public abstract class UpdatesFragment extends ListFragment {
             listAdapter.addAll(event.getResponse().getUpdates());
             loadedAllUpdates = listAdapter.getCount() >= event.getResponse().getTotal();
             isLoading = false;
-            currentPage = event.getPage();
+            currentPage = event.getRequest().getPage();
             updateProgress();
         }
     }
@@ -159,12 +162,12 @@ public abstract class UpdatesFragment extends ListFragment {
         currentPage = 0;
         loadedAllUpdates = false;
         updateProgress();
-        loadMore();
+        loadUpdatesOfNextPage();
     }
 
     private boolean shouldUpdateView(UpdatesEvent event) {
-        return delegate.getCurrentProfileId().equals(event.getProfileId())
-                && getStatusOfUpdates().equals(event.getStatus());
+        return delegate.getCurrentProfileId().equals(event.getRequest().getProfileId())
+                && getStatusOfUpdates().equals(event.getRequest().getStatus());
     }
 
     private void updateProgress() {

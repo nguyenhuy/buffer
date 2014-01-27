@@ -47,29 +47,30 @@ Job priorities:
 
 Cache policies:
 ===============
-- [`AccessTokenController`][9]: data is cached to persistent store. No other fancy things since we can’t get access token automatically.
-- [`ConfigurationController`][10]: data is cached to persistent store.
+- [`AccessTokenController`][9]: data is cached in memory and persistent store. No other fancy things since we can’t get access token automatically.
+- [`ConfigurationController`][10]: data is cached in memory and persistent store.
   - In constructor: 
     - Load data from persistent store and save to memory.
   - When data is requested:
-    - If it is in memory, it is returned immediately.
-    - If it is not in memory, it is loaded from network by an UI job and saved. Subscribers will be notified again.
+    - If it is in memory, it will be returned immediately.
+    - If it is not in memory, it will be loaded from network by an UI job and saved. Subscribers will be notified again.
   - Reason for this policy:
     - Configuration is not frequently changed so only make network call if the data is unavailable.
-- [`ProfilesController`][11]: data is cached in persistent store, but always sync with server:
+- [`ProfilesController`][11]: data is cached in memory and persistent store, but is always synced with server:
   - In constructor:
-      - Load data from persistent store and save to memory.
+    - Load data from persistent store and save to memory.
   - When data is requested:
-      - If it is in memory, it is returned immediately. Then it is loaded from network by a SYNC job and saved. Subscribers will be notified again.
-      - If it is not in memory, it is loaded from network by an UI job and saved. Subscribers will be notified.
+    - If it is in memory, it will be returned immediately. Then it is loaded from network by a SYNC job and saved. Subscribers will be notified again.
+    - If it is not in memory, it will be loaded from network by an UI job and saved. Subscribers will be notified.
   - Reason for this policy:
-      - Profiles may be changed from the web interface, but not so frequently.
-- [`UpdatesController`][12]: No cache.
-  - When data is requested, it is loaded from network by an UI job. Subscribers will be notified.
+    - Profiles may be changed from the web interface, but not so frequently.
+- [`UpdatesController`][12]: data is cached in memory.
+  - When data is requested:
+    - If it is in memory, it will be returned immediately.
+    - If it is being loaded, an appropriate event will be posted.
+    - If it is not in memory and not being loaded, it will be loaded from network by an UI job and saved. Subscribers will be notified.
   - Reason:
-    - Updates are changed very frequently, from the app and from web interface. So it’s hard to invalidate cache without supports from server (or user).
-    - Pagination makes it hard to cache and update UI. It’s doable but requires some love.
-
+    - Updates are changed very frequently, from the app and from web interface. So it’s hard to invalidate cache in persistent store without support from server (or user).
 
  [1]: http://birbit.com/a-recipe-for-writing-responsive-rest-clients-on-android
  [2]: https://github.com/fernandezpablo85/scribe-java

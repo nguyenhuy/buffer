@@ -72,6 +72,11 @@ Cache policies:
   - Reason:
     - Updates are changed very frequently, from the app and from web interface. So it’s hard to invalidate cache in persistent store without support from server (or user).
 
+Known bugs:
+============
+- `JobManager` is not meant to be used in context based objects. It should be stored in application object. Jobs then have to subscribe to lifecycle events of their activity and update their internal flag. `onRun()`, jobs will decide whether they should continue or not, based on the flag.
+- To manually show context menu for an list view item, we must call `ListView.showContextMenuForChild(childView)` instead of `Activity.openContextMenu(listView)`.
+
  [1]: http://birbit.com/a-recipe-for-writing-responsive-rest-clients-on-android
  [2]: https://github.com/fernandezpablo85/scribe-java
  [3]: http://square.github.io/dagger/
